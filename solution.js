@@ -14,10 +14,21 @@ function isSafe(levels) {
   return true;
 }
 
+// try removing each level one at a time to see if any removal makes it safe
+function isSafeWithDampener(levels) {
+  if (isSafe(levels)) return true;
+  for (let i = 0; i < levels.length; i++) {
+    const candidate = levels.slice(0, i).concat(levels.slice(i + 1));
+    if (isSafe(candidate)) return true;
+  }
+  return false;
+}
+
 async function main() {
   const data = (await fs.readFile('input.txt')).toString();
   const reports = data.trim().split('\n').map(line => line.split(' ').map(Number));
-  console.log(reports.filter(isSafe).length);
+  console.log('Part 1:', reports.filter(isSafe).length);
+  console.log('Part 2:', reports.filter(isSafeWithDampener).length);
 }
 
 main();
